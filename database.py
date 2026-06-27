@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from datetime import datetime
 
 DB_NAME = "upgrade.db"
@@ -9,6 +10,13 @@ def connect():
 def init_db():
     conn = connect()
     cur = conn.cursor()
+
+    # Eski tables'ni o'chirish (fresh start uchun)
+    try:
+        cur.execute("DROP TABLE IF EXISTS users")
+        cur.execute("DROP TABLE IF EXISTS transactions")
+    except:
+        pass
 
     cur.executescript("""
     CREATE TABLE IF NOT EXISTS users (

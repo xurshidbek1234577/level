@@ -1,32 +1,46 @@
+```python
 from aiogram import Router
-from aiogram.types import Message
-from aiogram.filters import Command
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.filters import CommandStart
 
-try:
-    from database import add_user
-except ImportError as e:
-    print(f"❌ Database import xatosi: {e}")
-    raise
+from database import add_user
 
 start_router = Router()
 
+# Asosiy menyu
+main_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="👤 Profil"),
+            KeyboardButton(text="🎯 Missiyalar"),
+        ],
+        [
+            KeyboardButton(text="🏆 Reyting"),
+            KeyboardButton(text="🛒 Do'kon"),
+        ],
+        [
+            KeyboardButton(text="🎁 Daily Bonus"),
+            KeyboardButton(text="⚙️ Sozlamalar"),
+        ],
+    ],
+    resize_keyboard=True,
+    one_time_keyboard=False,
+    input_field_placeholder="Kerakli bo'limni tanlang..."
+)
 
-@start_router.message(Command("start"))
+
+@start_router.message(CommandStart())
 async def start_handler(message: Message):
     user_id = message.from_user.id
-    username = message.from_user.username or f"User{user_id}"
-    
+    username = message.from_user.username or message.from_user.first_name
+
     add_user(user_id, username)
-    
+
     await message.answer(
-        f"👋 Salom, <b>{username}</b>!\n\n"
-        "🎮 Bu - <b>UPGRADE BOT</b>\n\n"
-        "<b>📋 Mavjud komandalari:</b>\n"
-        "/profile - Profilingizni ko'rish\n"
-        "/card - Profil kartani rasm shaklida ko'rish\n"
-        "/addxp [mikdor] - XP qo'shish\n"
-        "/alloc [stat] [mikdor] - Statni ajratish\n"
-        "/ranking - Top 10 reyting\n"
-        "/help - Yordam\n\n"
-        "🚀 Boshlash uchun /profile ni bosing!"
+        f"👋 Xush kelibsiz, <b>{username}</b>!\n\n"
+        "🚀 <b>UPGRADE BOT</b>\n\n"
+        "O'zingizni rivojlantirishni hoziroq boshlang.\n"
+        "👇 Quyidagi menyudan foydalaning.",
+        reply_markup=main_keyboard
     )
+```

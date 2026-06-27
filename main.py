@@ -54,14 +54,11 @@ async def main():
         
         logger.info("🚀 UPGRADE ishga tushdi...")
 
-        # Routers ulash
         dp.include_router(start_router)
         dp.include_router(profile_router)
-        dp.include_router(missions_router)
         dp.include_router(ranking_router)
-        dp.include_router(shop_router)
-        dp.include_router(settings_router)
-        dp.include_router(admin_router)
+        dp.include_router(mission_router)
+        dp.include_router(callback_router)
 
         # eski update'larni tozalash
         await bot.delete_webhook(drop_pending_updates=True)

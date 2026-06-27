@@ -2,7 +2,11 @@ from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command
 
-from database import add_user
+try:
+    from database import add_user
+except ImportError as e:
+    print(f"❌ Database import xatosi: {e}")
+    raise
 
 start_router = Router()
 

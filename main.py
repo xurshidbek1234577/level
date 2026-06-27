@@ -1,4 +1,3 @@
-```python
 import asyncio
 import logging
 import sys
@@ -61,4 +60,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         logger.info("Bot to'xtatildi.")
-```

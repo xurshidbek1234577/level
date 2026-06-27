@@ -2,9 +2,14 @@ from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command
 from io import BytesIO
+import sys
 
-from database import get_user, add_xp, allocate_stat
-from app.utils.image import generate_profile_card
+try:
+    from database import get_user, add_xp, allocate_stat
+    from app.utils.image import generate_profile_card
+except ImportError as e:
+    print(f"❌ Import xatosi: {e}")
+    sys.exit(1)
 
 profile_router = Router()
 
@@ -46,13 +51,16 @@ async def card_handler(message: Message):
         await message.answer("❌ Foydalanuvchi topilmadi. /start ni bosing.")
         return
     
-    # Rasmni generatsiya qilish
-    image_bytes = generate_profile_card(user)
-    
-    await message.answer_photo(
-        photo=image_bytes,
-        caption=f"🎴 {user[1]} ning profil kartasi"
-    )
+    try:
+        # Rasmni generatsiya qilish
+        image_bytes = generate_profile_card(user)
+        
+        await message.answer_photo(
+            photo=image_bytes,
+            caption=f"🎴 {user[1]} ning profil kartasi"
+        )
+    except Exception as e:
+        await message.answer(f"❌ Rasm generatsiya xatosi: {str(e)}")
 
 
 @profile_router.message(Command("addxp"))
